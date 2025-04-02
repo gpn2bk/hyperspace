@@ -33,7 +33,7 @@ install_node() {
   
   # 选择适当的层级
   if [ "$GPU_MEM" -eq 0 ]; then
-    num=1
+    num=5
   elif [ "$GPU_MEM" -lt 2048 ]; then
     num=5
   elif [ "$GPU_MEM" -lt 4096 ]; then
