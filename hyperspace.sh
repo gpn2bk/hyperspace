@@ -23,7 +23,7 @@ install_node() {
   if [ "$TOTAL_DISK" -lt 1048576 ]; then
     echo "硬盘不足1G"
     exit 1
-  elif [ "$TOTAL_DISK" -lt 2097152 ]; then
+  elif [ "$TOTAL_DISK" -lt 4194304 ]; then
     aios-cli models add hf:afrideva/Tiny-Vicuna-1B-GGUF:tiny-vicuna-1b.q4_k_m.gguf
   else
     aios-cli models add hf:afrideva/Tiny-Vicuna-1B-GGUF:tiny-vicuna-1b.q4_k_m.gguf
