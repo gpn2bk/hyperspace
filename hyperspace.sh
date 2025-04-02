@@ -1,7 +1,6 @@
 #!/bin/bash
 
 install_node() {
-  
   # 检查机器是否可用
   if ! lscpu | grep -E "sse4_2|avx|avx2" > /dev/null; then
     echo "机器不可用"
@@ -12,11 +11,12 @@ install_node() {
   curl https://download.hyper.space/api/install | bash
   source /root/.bashrc
   
-  # 后台运行 aios-cli start
+  # 后台运行 aios-cli start，并等待5秒
   aios-cli start &
+  sleep 5
   
-  # 查询显存和硬盘大小
-  TOTAL_MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+  # 查询显卡内存和剩余硬盘大小
+  GPU_MEM=$(lspci | grep -i nvidia && nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits || echo 0)
   TOTAL_DISK=$(df / | tail -1 | awk '{print $4}')
   
   # 检查硬盘大小
@@ -32,13 +32,15 @@ install_node() {
   aios-cli hive login
   
   # 选择适当的层级
-  if [ "$TOTAL_MEM" -lt 2097152 ]; then
+  if [ "$GPU_MEM" -eq 0 ]; then
+    num=1
+  elif [ "$GPU_MEM" -lt 2048 ]; then
     num=5
-  elif [ "$TOTAL_MEM" -lt 4194304 ]; then
+  elif [ "$GPU_MEM" -lt 4096 ]; then
     num=4
-  elif [ "$TOTAL_MEM" -lt 8388608 ]; then
+  elif [ "$GPU_MEM" -lt 8192 ]; then
     num=3
-  elif [ "$TOTAL_MEM" -lt 20971520 ]; then
+  elif [ "$GPU_MEM" -lt 20480 ]; then
     num=2
   else
     num=1
@@ -52,9 +54,38 @@ install_node() {
   screen -S hyperspace -X stuff "aios-cli start --connect\n"
   
   echo "安装完成"
+  echo "key.gem位于/root/.config/hyperspace"
 }
 
 # 查看积分函数
 check_points() {
   aios-cli hive points
 }
+
+# 显示菜单
+show_menu() {
+  echo "请选择功能："
+  echo "1. 安装节点"
+  echo "2. 查看积分"
+  echo "0. 退出"
+}
+
+while true; do
+  show_menu
+  read -p "输入你的选择: " choice
+  case $choice in
+    1)
+      install_node
+      ;;
+    2)
+      check_points
+      ;;
+    0)
+      echo "退出脚本"
+      exit 0
+      ;;
+    *)
+      echo "无效的选择，请重新输入"
+      ;;
+  esac
+done
