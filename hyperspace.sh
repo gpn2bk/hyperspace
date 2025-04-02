@@ -62,6 +62,10 @@ check_points() {
   aios-cli hive points
 }
 
+check_logs() {
+  screen -r hyperspace
+}
+
 # 显示菜单
 show_menu() {
   echo "请选择功能："
@@ -79,6 +83,9 @@ while true; do
       ;;
     2)
       check_points
+      ;;
+    3)
+      check_logs
       ;;
     0)
       echo "退出脚本"
