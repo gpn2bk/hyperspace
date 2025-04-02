@@ -66,12 +66,18 @@ check_logs() {
   screen -r hyperspace
 }
 
+reconnect() {
+  aios-cli kill
+  aios-cli start --connect
+}
+
 # 显示菜单
 show_menu() {
   echo "请选择功能："
   echo "1. 安装节点"
   echo "2. 查看积分"
   echo "3. 查看日志"
+  echo "4. 重新连接"
   echo "0. 退出"
 }
 
@@ -87,6 +93,9 @@ while true; do
       ;;
     3)
       check_logs
+      ;;
+    4)
+      reconnect
       ;;
     0)
       echo "退出脚本"
