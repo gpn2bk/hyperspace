@@ -26,9 +26,10 @@ install_node() {
   elif [ "$TOTAL_DISK" -lt 2097152 ]; then
     aios-cli models add hf:afrideva/Tiny-Vicuna-1B-GGUF:tiny-vicuna-1b.q4_k_m.gguf
   else
+    aios-cli models add hf:afrideva/Tiny-Vicuna-1B-GGUF:tiny-vicuna-1b.q4_k_m.gguf
     aios-cli models add hf:acon96/Home-3B-v3-GGUF:Home-3B-v3.q8_0.gguf
-    aios-cli hive login
   fi
+  aios-cli hive login
   
   # 选择适当的层级
   if [ "$TOTAL_MEM" -lt 2097152 ]; then
