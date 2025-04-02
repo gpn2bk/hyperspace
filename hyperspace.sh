@@ -71,6 +71,7 @@ show_menu() {
   echo "请选择功能："
   echo "1. 安装节点"
   echo "2. 查看积分"
+  echo "3. 查看日志"
   echo "0. 退出"
 }
 
